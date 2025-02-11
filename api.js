@@ -12,8 +12,8 @@ module.exports = autoCatch({
   listProducts,
   getProduct,
   createProduct,
-  updateProduct,  
-  deleteProduct, 
+  updateProduct,
+  deleteProduct,
 });
 
 /**
@@ -23,11 +23,12 @@ module.exports = autoCatch({
  */
 async function listProducts(req, res) {
   const { offset = 0, limit = 25, tag } = req.query;
-  res.json(await Products.list({
+  const products = await Products.list({
     offset: Number(offset),
     limit: Number(limit),
-    tag
-  }));
+    tag  
+  });
+  res.json(products);
 }
 
 /**

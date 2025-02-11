@@ -14,12 +14,26 @@ module.exports = {
 
 /**
  * List all products
+ * @param {object} options
+ * @param {number} options.offset
+ * @param {number} options.limit
+ * @param {string} options.tag
  * @returns {Promise<Array>}
  */
 async function list(options = {}) {
-  const { offset = 0, limit = 25 } = options;
+  const { offset = 0, limit = 25, tag } = options;
   const data = await fs.readFile(productsFile);
-  return JSON.parse(data).slice(offset, offset + limit); 
+  const products = JSON.parse(data);
+
+  // If tag is provided, filter the products by the title of the tags
+  if (tag) {
+    return products.filter(product =>
+      product.tags && product.tags.some(t => t.title && t.title.toLowerCase() === tag.toLowerCase())
+    );
+  }
+
+  // Slice the products and return based on offset and limit
+  return products.slice(offset, offset + limit);
 }
 
 /**
@@ -40,6 +54,7 @@ async function get(id) {
  */
 async function update(id, updatedProduct) {
   console.log(`Updating product with ID: ${id}`);
+  // Simulate updating the product (not implemented here)
   return { ...updatedProduct, id };
 }
 
@@ -50,5 +65,6 @@ async function update(id, updatedProduct) {
  */
 async function remove(id) {
   console.log(`Deleting product with ID: ${id}`);
+  // Simulate deleting the product (not implemented here)
   return;
 }
